@@ -1,44 +1,19 @@
 # Zero-Shot Defect Classification with CLIP
 
-This repository implements a **zero-shot defect classification** pipeline using **OpenAI’s CLIP model**. The focus is on the `hazelnut` subset of the **MVTec-AD** dataset. The project demonstrates the extension of zero-shot anomaly classification (normal vs defective) to **multi-class defect classification**.
+This project performs **zero-shot defect classification** on the **hazelnut subset** of the [MVTec-AD dataset](https://www.mvtec.com/company/research/datasets/mvtec-ad) using **OpenAI's CLIP model**. 
 
----
+The main goal is to classify hazelnuts as either **defect-free ("good")** or belonging to specific **defect categories** such as `"print"`, `"hole"`, `"crack"`, and `"cut"` without training on labeled examples. The system leverages:
 
-## Table of Contents
+- **Natural language prompts** to describe each defect type  
+- **Optional support images** to enhance few-shot classification  
+- **CLIP embeddings** to measure similarity between images and text prototypes  
 
-- [Overview](#overview)  
-- [Dataset](#dataset)  
-- [Project Structure](#project-structure)  
-- [Installation](#installation)  
-- [Usage](#usage)  
-- [Methodology](#methodology)  
-- [Results](#results)  
-- [Observations & Future Improvements](#observations--future-improvements)  
-- [License](#license)  
+The workflow includes:
 
----
+1. Defining textual prompts and support images for each defect class.  
+2. Encoding prompts and support images to create class prototypes.  
+3. Encoding test images and computing similarity with prototypes.  
+4. Predicting defect categories based on the highest similarity.  
+5. Evaluating performance using a **confusion matrix** and per-class metrics.  
 
-## Overview
-
-The goal of this project is to classify hazelnuts into **normal** and different **defect categories** using **zero-shot CLIP embeddings**, with optional support images for few-shot enhancement. The classification pipeline consists of:
-
-1. Generating class prototypes from **text prompts** and optional support images.  
-2. Encoding test images using CLIP.  
-3. Classifying images based on **cosine similarity** to class prototypes.  
-
-This avoids the need for extensive labeled datasets or model fine-tuning.
-
----
-
-## Dataset
-
-- **Dataset:** [MVTec-AD](https://www.mvtec.com/company/research/datasets/mvtec-ad) (hazelnut subset)  
-- **Data split:** Test set only  
-- **Defect types:** `print`, `hole`, `good`, `crack`, `cut`  
-
-Example image filenames: `hazelnut_good_023.png`, `hazelnut_crack_002.png`.
-
----
-
-## Project Structure
-
+This approach extends previous **anomaly detection with CLIP (WinCLIP / CLIP-AC)** to a **multi-class defect classification task**, achieving ~89% overall accuracy on the hazelnut dataset. Misclassifications primarily occur for visually similar defect types with limited samples, highlighting the importance of support images and carefully crafted prompts.
